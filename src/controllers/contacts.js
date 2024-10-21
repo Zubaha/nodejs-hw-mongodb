@@ -1,4 +1,4 @@
-import { getContacts, getContactByIdService } from '../services/contactsService.js';
+import { getContacts, getContactByIdService, createContactService, updateContactService, deleteContactService } from '../services/contactsService.js';
 
 export const getAllContacts = async (req, res) => {
     try {
@@ -40,4 +40,32 @@ export const getContactById = async (req, res) => {
             error: error.message
         });
     }
+};
+
+export const createContact = async (req, res) => {
+    const contactData = req.body;
+    const newContact = await createContactService(contactData);
+
+    res.status(201).json({
+        status: 201,
+        message: "Successfully created a contact!",
+        data: newContact,
+    });
+};
+
+export const updateContact = async (req, res) => {
+    const { contactId } = req.params;
+    const updateData = req.body;
+    const updatedContact = await updateContactService(contactId, updateData);
+    res.status(200).json({
+        status: 200,
+        message: "Successfully patched a contact!",
+        data: updatedContact,
+    });
+};
+
+export const deleteContact = async (req, res) => {
+    const { contactId } = req.params;
+    await deleteContactService(contactId);
+    res.status(204).send();
 };
