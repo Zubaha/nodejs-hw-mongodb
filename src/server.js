@@ -8,6 +8,7 @@ import notFoundHandler from './middlewares/notFoundHandler.js';
 export const setupServer = () => {
     const app = express();
     app.use(cors());
+    app.use(express.json());
     app.use(pino());
 
     app.use('/contacts', contactsRoutes);

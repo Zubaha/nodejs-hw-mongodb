@@ -1,4 +1,5 @@
 import { getContacts, getContactByIdService, createContactService, updateContactService, deleteContactService } from '../services/contactsService.js';
+import createError from 'http-errors';
 
 export const getAllContacts = async (req, res) => {
     try {
@@ -45,7 +46,6 @@ export const getContactById = async (req, res) => {
 export const createContact = async (req, res) => {
     const contactData = req.body;
     const newContact = await createContactService(contactData);
-
     res.status(201).json({
         status: 201,
         message: "Successfully created a contact!",
@@ -57,6 +57,9 @@ export const updateContact = async (req, res) => {
     const { contactId } = req.params;
     const updateData = req.body;
     const updatedContact = await updateContactService(contactId, updateData);
+    if (!updatedContact) {
+        throw createError(404, "Contact not found");
+    }
     res.status(200).json({
         status: 200,
         message: "Successfully patched a contact!",
@@ -66,6 +69,6 @@ export const updateContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
     const { contactId } = req.params;
-    await deleteContactService(contactId);
-    res.status(204).send();
+    const deletedContact = await deleteContactService(contactId);
+    res.status(200).json(deletedContact);
 };

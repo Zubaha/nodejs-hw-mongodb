@@ -31,8 +31,11 @@ export const updateContactService = async (contactId, updateData) => {
 };
 
 export const deleteContactService = async (contactId) => {
-    const deletedContact = await Contact.findByIdAndDelete(contactId);
+    const deletedContact = await Contact.findOneAndDelete({
+        _id: contactId,
+    });
     if (!deletedContact) {
         throw createError(404, "Contact not found");
     }
+    return deletedContact;
 };
