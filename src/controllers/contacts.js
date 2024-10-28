@@ -21,11 +21,18 @@ export const getAllContacts = ctrlWrapper(async (req, res) => {
 
     const contacts = await getContacts(Number(page), Number(perPage), sortBy, sortOrder, filter);
     
-
     res.status(200).json({
         status: 200,
         message: "Successfully found contacts!",
-        data: contacts.data,
+        data: {
+            data: contacts.data,
+            page: contacts.page,
+            perPage: contacts.perPage,
+            totalItems: contacts.totalItems,
+            totalPages: contacts.totalPages,
+            hasPreviousPage: contacts.hasPreviousPage,
+            hasNextPage: contacts.hasNextPage,
+        },
     });
 });
 
