@@ -2,13 +2,30 @@ import { getContacts, getContactByIdService, createContactService, updateContact
 import createError from 'http-errors';
 import mongoose from 'mongoose';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllContacts = ctrlWrapper(async (req, res) => {
-    const contacts = await getContacts();
+    const { page = 1, perPage = 10 } = req.query;
+    const { type, isFavourite } = parseFilterParams(req.query);
+    const { sortBy, sortOrder } = parseSortParams(req.query);
+
+    const filter = {};
+    if (type) {
+        filter.contactType = type;
+    }
+    if (isFavourite !== undefined) {
+        filter.isFavourite = isFavourite === 'true';
+    }
+
+
+    const contacts = await getContacts(Number(page), Number(perPage), sortBy, sortOrder, filter);
+    
+
     res.status(200).json({
         status: 200,
         message: "Successfully found contacts!",
-        data: contacts
+        data: contacts.data,
     });
 });
 
