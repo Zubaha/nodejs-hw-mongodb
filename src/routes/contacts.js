@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', getAllContacts);
 router.get('/:contactId',isValidID, getContactById);
 router.post('/', validateBody(contactSchema), createContact);
-router.patch('/:contactId',isValidID, updateContact);
+router.patch('/:contactId',isValidID, validateBody(contactSchema), updateContact);
 router.delete('/:contactId',isValidID, deleteContact);
 
 export default router;
