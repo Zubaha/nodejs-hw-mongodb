@@ -8,4 +8,10 @@ export const contactSchema = Joi.object({
     contactType: Joi.string().valid('work', 'home', 'personal').optional(),
 });
 
+export const contactPatchSchema = Joi.object({
+    name: Joi.string().optional(),
+    email: Joi.string().email().optional(),
+    phone: Joi.string().optional(),
+});
+
 
