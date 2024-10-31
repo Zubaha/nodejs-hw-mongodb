@@ -9,9 +9,9 @@ export const contactSchema = Joi.object({
 });
 
 export const contactPatchSchema = Joi.object({
-    name: Joi.string().optional(),
+    name: Joi.string().min(3).max(20).required(),
+    phoneNumber: Joi.string().min(3).max(20).required(),
     email: Joi.string().email().optional(),
-    phone: Joi.string().optional(),
 });
 
 
