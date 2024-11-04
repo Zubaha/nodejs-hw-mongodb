@@ -10,14 +10,13 @@ export const getAllContacts = ctrlWrapper(async (req, res) => {
     const { type, isFavourite } = parseFilterParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
 
-    const filter = {};
+    const filter = { userId: req.user.id };
     if (type) {
         filter.contactType = type;
     }
     if (isFavourite !== undefined) {
         filter.isFavourite = isFavourite === 'true';
     }
-
 
     const contacts = await getContacts(Number(page), Number(perPage), sortBy, sortOrder, filter);
     
@@ -38,12 +37,12 @@ export const getAllContacts = ctrlWrapper(async (req, res) => {
 
 export const getContactById = ctrlWrapper(async (req, res) => {
     const { contactId } = req.params;
+
     if (!mongoose.Types.ObjectId.isValid(contactId)) {
         throw createError(404, "Contact not found");
     }
+    const contact = await getContactByIdService(contactId, req.user.id);
 
-    const contact = await getContactByIdService(contactId);
-    
     if (!contact) {
         throw createError(404, "Contact not found");
     }
@@ -56,7 +55,7 @@ export const getContactById = ctrlWrapper(async (req, res) => {
 });
 
 export const createContact = ctrlWrapper(async (req, res) => {
-    const contactData = req.body;
+    const contactData = { ...req.body, userId: req.user.id };
     const newContact = await createContactService(contactData);
     res.status(201).json({
         status: 201,
@@ -73,7 +72,7 @@ export const updateContact = ctrlWrapper(async (req, res) => {
         throw createError(404, "Contact not found"); 
     }
 
-    const updatedContact = await updateContactService(contactId, updateData);
+    const updatedContact = await updateContactService(contactId, updateData, req.user.id);
     
     if (!updatedContact) {
         throw createError(404, "Contact not found");
@@ -93,7 +92,7 @@ export const deleteContact = ctrlWrapper(async (req, res) => {
         return res.status(404).json({ status: 404, message: "Contact not found" });
     }
 
-    const deletedContact = await deleteContactService(contactId);
+    const deletedContact = await deleteContactService(contactId, req.user.id);
     
     if (!deletedContact) {
         throw createError(404, "Contact not found"); 

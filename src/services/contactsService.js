@@ -22,8 +22,8 @@ export const getContacts = async (page = 1, perPage = 10, sortBy = '_id', sortOr
     };
 };
 
-export const getContactByIdService = async (contactId) => {
-        return await Contact.findById(contactId);
+export const getContactByIdService = async (contactId, userId) => {
+    return await Contact.findOne({ _id: contactId, userId });
 };
 
 export const createContactService = async (contactData) => {
@@ -32,9 +32,8 @@ export const createContactService = async (contactData) => {
     return newContact.toObject({ versionKey: false });
 };
 
-export const updateContactService = async (contactId, updateData) => {
-    const updatedContact = await Contact.findByIdAndUpdate(contactId, updateData, { new: true });
-    return updatedContact;
+export const updateContactService = async (contactId, updateData, userId) => {
+    return await Contact.findOneAndUpdate({ _id: contactId, userId }, updateData, { new: true });
 };
 
 export const deleteContactService = async (contactId) => {
