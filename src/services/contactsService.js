@@ -1,4 +1,5 @@
 import Contact from '../models/contacts.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getContacts = async (page = 1, perPage = 10, sortBy = '_id', sortOrder = 'asc', filter = {}) => {
     const totalItems = await Contact.countDocuments(filter);
@@ -26,13 +27,21 @@ export const getContactByIdService = async (contactId, userId) => {
     return await Contact.findOne({ _id: contactId, userId });
 };
 
-export const createContactService = async (contactData) => {
+export const createContactService = async (contactData, file) => {
+    if (file) {
+        const result = await uploadToCloudinary(file.path);
+        contactData.photo = result.secure_url;
+    }
     const newContact = new Contact(contactData);
     await newContact.save();
     return newContact.toObject({ versionKey: false });
 };
 
-export const updateContactService = async (contactId, updateData, userId) => {
+export const updateContactService = async (contactId, updateData, userId, file) => {
+    if (file) {
+        const result = await uploadToCloudinary(file.path);
+        updateData.photo = result.secure_url;
+    }
     return await Contact.findOneAndUpdate({ _id: contactId, userId }, updateData, { new: true });
 };
 

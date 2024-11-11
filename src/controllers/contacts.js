@@ -56,7 +56,7 @@ export const getContactById = ctrlWrapper(async (req, res) => {
 
 export const createContact = ctrlWrapper(async (req, res) => {
     const contactData = { ...req.body, userId: req.user.id };
-    const newContact = await createContactService(contactData);
+    const newContact = await createContactService(contactData, req.file);
     res.status(201).json({
         status: 201,
         message: "Successfully created a contact!",
@@ -72,7 +72,7 @@ export const updateContact = ctrlWrapper(async (req, res) => {
         throw createError(404, "Contact not found"); 
     }
 
-    const updatedContact = await updateContactService(contactId, updateData, req.user.id);
+    const updatedContact = await updateContactService(contactId, updateData, req.user.id, req.file);
     
     if (!updatedContact) {
         throw createError(404, "Contact not found");

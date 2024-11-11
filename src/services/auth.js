@@ -1,8 +1,14 @@
 import User from '../models/user.js';
+
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import Session from '../models/session.js';
 import crypto from 'node:crypto';
+import jwt from 'jsonwebtoken';
+
+import { sendMail } from '../utils/sendMail.js';
+
+
 
 export const registerUser = async ({ name, email, password }) => {
     const existingUser = await User.findOne({ email });
@@ -82,3 +88,35 @@ export const logoutService = async (refreshToken) => {
 
     await Session.deleteOne({ refreshToken });
 }; 
+
+export const sendResetEmailService = async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw createHttpError(404, 'User not found!');
+    }
+
+    const resetToken = jwt.sign({ sub: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '5m' });
+    const resetLink = `${process.env.APP_DOMAIN}/reset-password?token=${resetToken}`;
+
+  
+        await sendMail({
+            from: process.env.SMTP_FROM,
+            to: email,
+            subject: 'Reset your password',
+            html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+        });
+
+};
+
+export const resetPasswordService = async (token, password) => {
+  
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findOne({ _id: decoded.sub, email: decoded.email });
+        if (!user) {
+            throw createHttpError(404, 'User not found!');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+        await Session.deleteOne({ userId: user._id });
+};
