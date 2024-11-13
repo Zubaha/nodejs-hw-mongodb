@@ -1,0 +1,94 @@
+tags:
+  - Contacts
+summary: Update contact by ID
+operationId: updateContact
+description: Update a contact by its ID.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    description: The ID of the contact to update.
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            minLength: 3
+            maxLength: 20
+          phoneNumber:
+            type: string
+            minLength: 3
+            maxLength: 20
+          email:
+            type: string
+            format: email
+          isFavourite:
+            type: boolean
+          contactType:
+            type: string
+            enum: ['work', 'home', 'personal']
+responses:
+  '200':
+    description: Contact successfully updated
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: "Contact successfully updated!"
+            data:
+              type: object
+              properties:
+                name:
+                  type: string
+                phoneNumber:
+                  type: string
+                email:
+                  type: string
+                isFavourite:
+                  type: boolean
+                contactType:
+                  type: string
+  '400':
+    description: Invalid input
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: "Invalid input data."
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '404':
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: "Contact not found."
+  '500':
+    $ref: ../../../components/responses/500.yaml

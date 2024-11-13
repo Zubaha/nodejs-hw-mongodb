@@ -1,0 +1,71 @@
+tags:
+  - Contacts
+summary: Get all contacts
+operationId: getAllContacts
+description: Retrieve a list of all contacts for the authenticated user.
+security:
+  - bearerAuth: []
+parameters:
+  - name: page
+    in: query
+    required: false
+    description: The page number to retrieve.
+    schema:
+      type: integer
+      default: 1
+  - name: perPage
+    in: query
+    required: false
+    description: The number of contacts per page.
+    schema:
+      type: integer
+      default: 10
+  - name: sortBy
+    in: query
+    required: false
+    description: The field to sort by.
+    schema:
+      type: string
+      default: "_id"
+  - name: sortOrder
+    in: query
+    required: false
+    description: The order to sort by (asc or desc).
+    schema:
+      type: string
+      default: "asc"
+responses:
+  '200':
+    description: Successful response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+            data:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                page:
+                  type: integer
+                perPage:
+                  type: integer
+                totalItems:
+                  type: integer
+                totalPages:
+                  type: integer
+                hasPreviousPage:
+                  type: boolean
+                hasNextPage:
+                  type: boolean
+  '401':
+    $ref: ../../components/responses/401.yaml 
+  '500':
+    $ref: ../../components/responses/500.yaml                 
