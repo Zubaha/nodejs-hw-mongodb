@@ -12,6 +12,9 @@
   "servers": [
     {
       "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://nodejs-hw-mongodb-mewa.onrender.com"
     }
   ],
   "tags": [
@@ -151,7 +154,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -176,6 +179,10 @@
                       "home",
                       "personal"
                     ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               }
@@ -354,7 +361,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -382,6 +389,10 @@
                       "home",
                       "personal"
                     ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               }
