@@ -20,14 +20,18 @@ requestBody:
             required: true
           email:
             type: string
+            required: false
           isFavourite:
             type: boolean
+            required: false
           contactType:
             type: string
             enum: ['work', 'home', 'personal']
+            required: false
           photo:
             type: string
             format: binary
+            required: false
 responses:
   '201':
     description: Contact successfully created

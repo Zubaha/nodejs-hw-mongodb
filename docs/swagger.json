@@ -167,10 +167,12 @@
                     "required": true
                   },
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "required": false
                   },
                   "isFavourite": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "required": false
                   },
                   "contactType": {
                     "type": "string",
@@ -178,11 +180,13 @@
                       "work",
                       "home",
                       "personal"
-                    ]
+                    ],
+                    "required": false
                   },
                   "photo": {
                     "type": "string",
-                    "format": "binary"
+                    "format": "binary",
+                    "required": false
                   }
                 }
               }
