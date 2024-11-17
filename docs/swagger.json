@@ -160,19 +160,23 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "required": true
+                    "nullable": false,
+                    "description": "Contact's name"
                   },
                   "phoneNumber": {
                     "type": "string",
-                    "required": true
+                    "nullable": false,
+                    "description": "Contact's phone number"
                   },
                   "email": {
                     "type": "string",
-                    "required": false
+                    "nullable": true,
+                    "description": "Contact's email address"
                   },
                   "isFavourite": {
                     "type": "boolean",
-                    "required": false
+                    "nullable": true,
+                    "description": "Is the contact a favorite?"
                   },
                   "contactType": {
                     "type": "string",
@@ -181,12 +185,13 @@
                       "home",
                       "personal"
                     ],
-                    "required": false
+                    "nullable": true,
+                    "description": "Type of contact"
                   },
                   "photo": {
                     "type": "string",
                     "format": "binary",
-                    "required": false
+                    "nullable": true
                   }
                 }
               }
