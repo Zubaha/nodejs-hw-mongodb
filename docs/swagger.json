@@ -194,7 +194,8 @@
                   },
                   "photo": {
                     "type": "string",
-                    "format": "binary"
+                    "format": "binary",
+                    "description": "Contact's photo"
                   }
                 }
               }

@@ -39,6 +39,7 @@ requestBody:
           photo:
             type: string
             format: binary
+            description: "Contact's photo"
 responses:
   '201':
     description: Contact successfully created
