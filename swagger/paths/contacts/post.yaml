@@ -6,37 +6,39 @@ description: Create a new contact for the authenticated user.
 security:
   - bearerAuth: []
 requestBody:
-  required: true
   content:
     multipart/form-data:
       schema:
         type: object
+        required:
+          - name
+          - phoneNumber
+          - contactType
         properties:
           name:
             type: string
-            nullable: false
             description: "Contact's name"
+            example: 'Tom Tomson'
           phoneNumber:
             type: string
-            nullable: false
             description: "Contact's phone number"
+            example: '+12333435554'
           email:
             type: string
-            nullable: true
             description: "Contact's email address"
+            example: 'tom123@mail.com'
           isFavourite:
             type: boolean
-            nullable: true
             description: "Is the contact a favorite?"
+            example: true
           contactType:
             type: string
             enum: ['work', 'home', 'personal']
-            nullable: true
             description: "Type of contact"
+            example: 'home'
           photo:
             type: string
             format: binary
-            nullable: true
 responses:
   '201':
     description: Contact successfully created
